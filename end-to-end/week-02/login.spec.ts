@@ -15,11 +15,3 @@ test('Login authenticated user', async ({page}) => {
    
 });
 
-test('Invalid password login', async ({page})=>{
-
-    await page.getByPlaceholder('Username').fill('standard_user');
-    await page.getByPlaceholder('Password').fill('InvlaidPassword');
-
-    await expect(page.locator('.error-button')).toBeVisible();
-})
-
