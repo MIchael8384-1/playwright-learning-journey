@@ -34,7 +34,7 @@ test('User can add item to the cart', async ({page}) => {
     await expect(page.locator('.cart_quantity')).toHaveText('1');
     await expect(page.getByRole('button', {name : 'Checkout'})).toBeVisible();
 
-})
+});
 
 test('Remove item so cart it empty and return to inventory screen', async ({page}) =>{
 
@@ -52,4 +52,21 @@ test('Remove item so cart it empty and return to inventory screen', async ({page
     await page.getByRole('button', {name : 'Continue Shopping'}).click();
 
     await expect(page).toHaveURL(/inventory/);
-})
+});
+
+test('Add multiple items to cart', async ({page}) => {
+    
+    await page.locator('[data-test=add-to-cart-sauce-labs-backpack]').click();
+    await page.locator('[data-test=add-to-cart-sauce-labs-bolt-t-shirt]').click();
+    await expect(page.locator('.shopping_cart_badge')).toHaveText('2');
+
+    await page.locator('.shopping_cart_link').click();
+
+    await expect(page).toHaveURL(/cart/);
+    await expect(page.getByText('Your Cart')).toBeVisible();
+
+    await expect(page.locator('.cart_item')).toHaveCount(2);
+    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
+    //await expect(page.locator('.inventory_item_name')).toHaveText('Sauce Labs Bolt T-Shirt');
+
+});
