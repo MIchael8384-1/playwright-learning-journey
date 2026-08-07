@@ -1,23 +1,46 @@
 import { Page } from "@playwright/test"
 export class LoginPage {
-
-    usernameInput;
-    passwordInput;
+    //Variable
+   
+    usernameField;
+    passwordField;
     loginButton;
+    errorMessage;
 
     constructor(private page: Page) {
-    
-        this.usernameInput = this.page.getByPlaceholder('Username');
-        this.passwordInput = this.page.getByPlaceholder('Password');
+        //locators
+       
+        this.usernameField = this.page.getByPlaceholder('Username');
+        this.passwordField = this.page.getByPlaceholder('Password');
         this.loginButton = this.page.getByRole('button', {name : 'Login'});
+        this.errorMessage = this.page.locator('[data-test="error"]');
 
     }
-    
+    //Methods 
     async login(username: string, password: string){
 
-        await this.usernameInput.fill(username);
-        await this.passwordInput.fill(password);
-        await this.loginButton.click();
+        await this.enterUsername(username);
+        await this.enterPassword(password);
+        await this.clickLogin();
+
+    }
+
+    async enterUsername(username: string){
+
+        await this.usernameField.fill(username);
+
+    }
+
+    async clearUsername(){
+        await this.usernameField.clear();
+    }
+
+    async clearPassword(){
+        await this.passwordField.clear();
+    }
+
+    async enterPassword(password: string){
+        await this.passwordField.fill(password);
 
     }
 
@@ -25,6 +48,9 @@ export class LoginPage {
         await this.loginButton.click(); 
     }
 
-
+    async getErrorMessage(){
+       return await this.errorMessage.innerText();
+        
+    }
  
 }
