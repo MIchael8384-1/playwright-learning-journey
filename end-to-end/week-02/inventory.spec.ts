@@ -1,41 +1,43 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage'; 
+import { InventoryPage } from '../../pages/InventoryPage';
 
 test.beforeEach(async ({page})=>{
-    
+
+    const loginPage = new LoginPage(page);
     await page.goto('https://www.saucedemo.com/');
-
-    await page.getByPlaceholder('Username').fill('standard_user');
-    await page.getByPlaceholder('Password').fill('secret_sauce');
-    await page.getByRole('button', {name: 'Login'}).click();
-
-    await expect(page).toHaveURL(/inventory/);
+    await loginPage.login('standard_user','secret_sauce')
 
 })
 
 test('User can view the inventory Page', async ({page}) => {
 
+    await expect(page).toHaveURL(/inventory/);
     await expect(page.getByText('Products')).toBeVisible();
-})
+});
 
 test('Inventory dispalys product information', async ({page}) => {
 
-    await expect(page.locator('.inventory_item')).toHaveCount(6);
+    const inventoryPage = new InventoryPage(page);
+
+    await expect(inventoryPage.productItems).toHaveCount(6);
 
     //Item Name
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
+    await expect(inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');
     //Item Button
-    await expect(page.getByText('$29.99')).toBeVisible();
+    await expect(inventoryPage.productPrice.first()).toContainText('$29.99');
    
 });
 
 test('User can sort products by name descending', async ({page})=>{
 
+    const inventoryPage = new InventoryPage(page);
     //Name
-    await expect(page.locator('.inventory_item_name')).toHaveCount(6);
+    await expect(inventoryPage.productName).toHaveCount(6);
     //Price
-    await expect(page.locator('.inventory_item_price')).toHaveCount(6);
+    await expect(inventoryPage.productPrice).toHaveCount(6);
     //Cart
-    await expect(page.locator('.btn_inventory')).toHaveCount(6);
+    await expect(inventoryPage.productButtons).toHaveCount(6);
 
 /*
 Debugging 
@@ -49,10 +51,10 @@ Debugging
     const product = await firstProduct.innerText();
     console.log(product);
 */
-    await expect(page.locator('.inventory_item_name').first()).toHaveText('Sauce Labs Backpack');
+    await expect(inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
 
-    await expect(page.locator('.active_option')).toHaveText('Name (A to Z)');
-    await page.locator('.product_sort_container').selectOption('za');
-    await expect(page.locator('.inventory_item_name').first()).toHaveText('Test.allTheThings() T-Shirt (Red)');
+    await expect(inventoryPage.sortOption).toHaveText('Name (A to Z)');
+    await inventoryPage.sortProducts('za');
+    await expect(inventoryPage.productName.first()).toHaveText('Test.allTheThings() T-Shirt (Red)');
 
 })
