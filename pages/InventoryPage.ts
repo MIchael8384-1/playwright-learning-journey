@@ -7,7 +7,9 @@ export class InventoryPage {
     productPrice;
     productButtons;
     sortOption;
-    sortContainer
+    sortContainer;
+    productBackpack;
+    productTshirt;
 
     constructor(private page : Page){
 
@@ -17,6 +19,8 @@ export class InventoryPage {
         this.productButtons = this.page.locator('.btn_inventory');
         this.sortOption = this.page.locator('.active_option');
         this.sortContainer = this.page.locator('.product_sort_container');
+        this.productBackpack = this.page.locator('[data-test=add-to-cart-sauce-labs-backpack]');
+        this.productTshirt = this.page.locator('[data-test=add-to-cart-sauce-labs-bolt-t-shirt]');
     }
 
     async sortProducts(value: string){

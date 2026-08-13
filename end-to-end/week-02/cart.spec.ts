@@ -1,72 +1,72 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { CartPage } from '../../pages/CartPage';
+
 
 test.beforeEach(async ({page}) => {
 
+    const loginPage = new LoginPage(page);
+
     await page.goto('https://www.saucedemo.com/');
-
-    await page.getByPlaceholder('Username').fill('standard_user');
-    await page.getByPlaceholder('Password').fill('secret_sauce');
-    await page.getByRole('button', {name: 'Login'}).click();
-
+    await loginPage.login('standard_user','secret_sauce');
     await expect(page).toHaveURL(/inventory/);
     
 });
 
 test('Add item to cart from inventory screen', async ({page}) => {
 
-    await expect(page.locator('.inventory_item_name').first()).toHaveText('Sauce Labs Backpack');
-    await page.locator('.btn_inventory').first().click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
 
-    await expect(page.locator('[data-test=shopping-cart-badge]')).toHaveText('1');
-
-    await expect(page.locator('.btn_inventory').first()).toHaveText('Remove');
+    await inventoryPage.productButtons.first().click();
+    await expect(cartPage.cartProducts.first()).toHaveText('Sauce Labs Backpack');
+    await expect(cartPage.cartBadge).toHaveText('1');
+    await expect(inventoryPage.productButtons.first()).toHaveText('Remove');
 })
 
 test('User can add item to the cart', async ({page}) => {
 
-    await page.locator('.btn_inventory').first().click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
 
-    await page.locator('.shopping_cart_link').click();
-
+    await inventoryPage.productButtons.first().click();
+    await cartPage.cartLink.click();
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-    await expect(page.locator('.inventory_item_name')).toHaveText('Sauce Labs Backpack')
-    await expect(page.locator('.cart_quantity')).toHaveText('1');
-    await expect(page.getByRole('button', {name : 'Checkout'})).toBeVisible();
+    await expect(cartPage.title).toContainText('Your Cart');
+    await expect(cartPage.cartProducts).toContainText('Sauce Labs Backpack')
+    await expect(cartPage.cartQuantity).toContainText('1');
+    await expect(cartPage.checkoutButton).toBeVisible();
 
 });
 
 test('Remove item so cart it empty and return to inventory screen', async ({page}) =>{
 
-    await page.locator('.btn_inventory').first().click();
-    await page.locator('.shopping_cart_link').click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
 
-    await expect(page.locator('.inventory_item_name')).toHaveText('Sauce Labs Backpack');
-
-    await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
-
-    await page.getByRole('button', {name: 'Remove'}).click();
-
-    await expect(page.locator('.shopping_cart_badge')).toHaveCount(0);
-
-    await page.getByRole('button', {name : 'Continue Shopping'}).click();
-
+    await inventoryPage.productButtons.first().click();
+    await cartPage.cartLink.click();
+    await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
+    await expect(cartPage.cartQuantity).toHaveText('1');
+    await cartPage.removeItem.click();
+    await expect(cartPage.cartBadge).toHaveCount(0);
+    await cartPage.continueButton.click();
     await expect(page).toHaveURL(/inventory/);
 });
 
 test('Add multiple items to cart', async ({page}) => {
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
     
-    await page.locator('[data-test=add-to-cart-sauce-labs-backpack]').click();
-    await page.locator('[data-test=add-to-cart-sauce-labs-bolt-t-shirt]').click();
-    await expect(page.locator('.shopping_cart_badge')).toHaveText('2');
-
-    await page.locator('.shopping_cart_link').click();
-
+    await inventoryPage.productBackpack.click();
+    await inventoryPage.productTshirt.click();
+    await expect(cartPage.cartBadge).toHaveText('2');
+    await cartPage.cartLink.click();
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-
-    await expect(page.locator('.cart_item')).toHaveCount(2);
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
-    //await expect(page.locator('.inventory_item_name')).toHaveText('Sauce Labs Bolt T-Shirt');
+    await expect(cartPage.title).toBeVisible();
+    await expect(cartPage.cartItems).toHaveCount(2);
+    await expect(cartPage.cartProducts.first()).toHaveText('Sauce Labs Backpack');
+ 
 
 });
