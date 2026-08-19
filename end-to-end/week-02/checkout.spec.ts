@@ -145,7 +145,7 @@ test('User cancels purchase', async ({page}) => {
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toBeVisible();
-    await expect(checkoutPage.productName).toHaveText('Sauce Labs Backpack');
+    await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
     await cartPage.checkoutButton.click();
 
