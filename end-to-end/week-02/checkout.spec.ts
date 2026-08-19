@@ -1,152 +1,168 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage';
+import { InventoryPage } from '../../pages/InventoryPage';
+import { CartPage } from '../../pages/CartPage';
+import { CheckoutPage } from '../../pages/CheckoutPage';
 
 test.beforeEach(async ({page}) => {
 
+    const loginPage = new LoginPage(page);
+
     await page.goto('https://www.saucedemo.com/');
-
-    await page.getByPlaceholder('Username').fill('standard_user');
-    await page.getByPlaceholder('Password').fill('secret_sauce');
-    await page.getByRole('button', {name: 'Login'}).click();
-
+    await loginPage.login('standard_user','secret_sauce');
     await expect(page).toHaveURL(/inventory/);
 })
 
 test('User can complete checkout succesfully', async ({page}) =>{
 
-    await page.locator('.btn_inventory').first().click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page);
 
-    await page.locator('.shopping_cart_link').click();
-
+    await inventoryPage.productButtons.first().click();
+    await cartPage.cartLink.click();
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
 
-    await page.getByRole('button', {name : 'Checkout'}).click();
-
+    await expect(cartPage.title).toBeVisible();
+    await expect(inventoryPage.productName).toBeVisible();
+    await cartPage.checkoutButton.click();
     await expect(page).toHaveURL(/checkout-step-one/);
-    await expect(page.getByText('Checkout: Your Information')).toBeVisible();
+    await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await page.getByPlaceholder('First Name').fill('Michael');
-    await page.getByPlaceholder('Last Name').fill('Lynch');
-    await page.getByPlaceholder('Zip/Postal Code').fill('m31 7dr');
-    await page.getByRole('button', {name: 'Continue'}).click();
-
+    await checkoutPage.checkoutInformation('Michael','Lynch','m31 7dr');
     await expect(page).toHaveURL(/checkout-step-two/);
-    await expect(page.getByText('Checkout: Overview')).toBeVisible();
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
-    await expect(page.getByText('Payment Information:')).toBeVisible();
-    await expect(page.getByText('Shipping Information:')).toBeVisible();
-    await expect(page.getByText('Price Total')).toBeVisible();
-    await expect(page.getByRole('button', {name : 'Finish'})).toBeVisible();
 
-    await page.getByRole('button', {name : 'Finish'}).click();
+    await expect(checkoutPage.title).toBeVisible();
+    await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
+    await expect(checkoutPage.paymentInformation).toContainText('Payment Information:');
+    await expect(checkoutPage.shippingInformation).toContainText('Shipping Information:');
+    await expect(checkoutPage.priceTotal).toContainText('Price Total');
+    await expect(checkoutPage.finish).toBeVisible();
+
+    await checkoutPage.finish.click();
 
     await expect(page).toHaveURL(/checkout-complete/);
-    await expect(page.getByText('Checkout: Complete!')).toBeVisible();
-    await expect(page.getByText('Thank you for your order!')).toBeVisible();
+    await expect(checkoutPage.title).toHaveText('Checkout: Complete!');
+    await expect(checkoutPage.checkoutComplete).toHaveText('Thank you for your order!');
 
-    await page.getByRole('button', {name: 'Back Home'}).click();
+    await checkoutPage.home.click();
     await expect(page).toHaveURL(/inventory/);
-    await expect(page.locator('.shopping_cart_badge')).toHaveCount(0)
+    await expect(cartPage.cartBadge).toHaveCount(0)
 
 });
 
 test('First name is required', async ({page}) => {
 
-    await page.locator('.btn_inventory').first().click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page);
 
-    await page.locator('.shopping_cart_link').click();
+    await inventoryPage.productButtons.first().click();;
+
+    await cartPage.cartLink.click();
 
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
+    await expect(cartPage.title).toBeVisible();
+    await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await page.getByRole('button', {name : 'Checkout'}).click();
+    await cartPage.checkoutButton.click();
 
     await expect(page).toHaveURL(/checkout-step-one/);
-    await expect(page.getByText('Checkout: Your Information')).toBeVisible();
+    await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await page.getByPlaceholder('First Name').fill('');
-    await page.getByPlaceholder('Last Name').fill('Test');
-    await page.getByPlaceholder('Zip/Postal Code').fill('M30');
-    await page.getByRole('button', {name: 'Continue'}).click();
+    await checkoutPage.enterFirstName('');
+    await checkoutPage.enterLastName('Test');
+    await checkoutPage.enterPostalCode('M30');
+    await checkoutPage.clickContinue();
 
-    await expect(page.getByText('Error: First Name is required')).toBeVisible();
+    await expect(checkoutPage.errorMessage).toHaveText('Error: First Name is required')
 });
 
 
 test('Last name is required', async ({page}) => {
-    await page.locator('.btn_inventory').first().click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page)
 
-    await page.locator('.shopping_cart_link').click();
+    await inventoryPage.productButtons.first().click();;
+
+    await cartPage.cartLink.click();
 
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
+    await expect(cartPage.title).toBeVisible();
+    await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await page.getByRole('button', {name : 'Checkout'}).click();
+    await cartPage.checkoutButton.click();
 
     await expect(page).toHaveURL(/checkout-step-one/);
-    await expect(page.getByText('Checkout: Your Information')).toBeVisible();
+    await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await page.getByPlaceholder('First Name').fill('Test');
-    await page.getByPlaceholder('Last Name').fill('');
-    await page.getByPlaceholder('Zip/Postal Code').fill('M30');
-    await page.getByRole('button', {name: 'Continue'}).click();
+    await checkoutPage.enterFirstName('Test');
+    await checkoutPage.enterLastName('');
+    await checkoutPage.enterPostalCode('M30');
+    await checkoutPage.clickContinue();
 
-    await expect(page.getByText('Error: Last Name is required')).toBeVisible();
-
+    await expect(checkoutPage.errorMessage).toHaveText('Error: Last Name is required')
 })
 
 test('Zip/PostCode is required', async ({page}) => {
-    
-    await page.locator('.btn_inventory').first().click();
 
-    await page.locator('.shopping_cart_link').click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page)
+
+    await inventoryPage.productButtons.first().click();;
+
+    await cartPage.cartLink.click();
 
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
+    await expect(cartPage.title).toBeVisible();
+    await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await page.getByRole('button', {name : 'Checkout'}).click();
+    await cartPage.checkoutButton.click();
 
     await expect(page).toHaveURL(/checkout-step-one/);
-    await expect(page.getByText('Checkout: Your Information')).toBeVisible();
+    await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await page.getByPlaceholder('First Name').fill('Test');
-    await page.getByPlaceholder('Last Name').fill('Test');
-    await page.getByPlaceholder('Zip/Postal Code').fill('');
-    await page.getByRole('button', {name: 'Continue'}).click();
+    await checkoutPage.enterFirstName('Test');
+    await checkoutPage.enterLastName('Test');
+    await checkoutPage.enterPostalCode('');
+    await checkoutPage.clickContinue();
 
-    await expect(page.getByText('Error: Postal Code is required')).toBeVisible();
+    await expect(checkoutPage.errorMessage).toHaveText('Error: Postal Code is required')
 })
 
 
 test('User cancels purchase', async ({page}) => {
 
-    await page.locator('.btn_inventory').first().click();
+    const inventoryPage = new InventoryPage(page);
+    const cartPage = new CartPage(page);
+    const checkoutPage = new CheckoutPage(page)
 
-    await page.locator('.shopping_cart_link').click();
+    await inventoryPage.productButtons.first().click();;
+
+    await cartPage.cartLink.click();
 
     await expect(page).toHaveURL(/cart/);
-    await expect(page.getByText('Your Cart')).toBeVisible();
-    await expect(page.getByText('Sauce Labs Backpack')).toBeVisible();
+    await expect(cartPage.title).toBeVisible();
+    await expect(checkoutPage.productName).toHaveText('Sauce Labs Backpack');
 
-    await page.getByRole('button', {name : 'Checkout'}).click();
+    await cartPage.checkoutButton.click();
 
     await expect(page).toHaveURL(/checkout-step-one/);
-    await expect(page.getByText('Checkout: Your Information')).toBeVisible();
+    await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await page.getByPlaceholder('First Name').fill('Michael');
-    await page.getByPlaceholder('Last Name').fill('Lynch');
-    await page.getByPlaceholder('Zip/Postal Code').fill('m31 7dr');
-    await page.getByRole('button', {name: 'Continue'}).click();
+    await checkoutPage.enterFirstName('Test');
+    await checkoutPage.enterLastName('Test');
+    await checkoutPage.enterPostalCode('m30');
+    await checkoutPage.clickContinue();
 
     await expect(page).toHaveURL(/checkout-step-two/);
-    await expect(page.getByText('Checkout: Overview')).toBeVisible();
-    await expect(page.getByRole('button', {name : 'Cancel'})).toBeVisible()
+    await expect(checkoutPage.title).toHaveText('Checkout: Overview')
+    
+    await expect(checkoutPage.cancel).toBeVisible()
 
-    await page.getByRole('button', {name : 'Cancel'}).click();
+    await checkoutPage.cancel.click();
 
     await expect(page).toHaveURL(/inventory/);
 })
