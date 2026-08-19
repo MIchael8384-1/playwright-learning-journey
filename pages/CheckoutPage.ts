@@ -16,7 +16,8 @@ export class CheckoutPage {
     checkoutComplete;
     home;
     errorMessage;
-    cancel
+    cancel;
+    
 
     
 
