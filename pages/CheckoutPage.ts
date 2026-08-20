@@ -17,6 +17,7 @@ export class CheckoutPage {
     home;
     errorMessage;
     cancel;
+    checkoutProducts
     
 
     
@@ -31,13 +32,11 @@ export class CheckoutPage {
         this.shippingInformation = this.page.locator('.summary_info');
         this.priceTotal = this.page.locator('.summary_info');
         this.finish = this.page.getByRole('button', {name : 'Finish'});
-        this.titleComplete = this.page.locator('.title');
         this.checkoutComplete = this.page.locator('.complete-header');
         this.home = this.page.getByRole('button', {name : 'Back Home'});
         this.errorMessage = this.page.locator('[data-test="error"]');
         this.cancel = this.page.getByRole('button', {name : 'Cancel'});
-
-
+        this.checkoutProducts = this.page.locator('[data-test="item-4-title-link"]');
     }
 
     async checkoutInformation(firstName : string, lastName: string, postalCode: string){
@@ -61,6 +60,18 @@ export class CheckoutPage {
 
     async clickContinue(){
         await this.continue.click();
+    }
+
+    async completeCheckout(){
+        await this.finish.click();
+    }
+
+    async returnHome(){
+        await this.home.click();
+    }
+
+    async cancelPurchase(){
+        await this.cancel.click();
     }
 
 }

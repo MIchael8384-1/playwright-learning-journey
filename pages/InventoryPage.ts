@@ -10,6 +10,7 @@ export class InventoryPage {
     sortContainer;
     productBackpack;
     productTshirt;
+    cartBadge
 
     constructor(private page : Page){
 
@@ -21,9 +22,17 @@ export class InventoryPage {
         this.sortContainer = this.page.locator('.product_sort_container');
         this.productBackpack = this.page.locator('[data-test=add-to-cart-sauce-labs-backpack]');
         this.productTshirt = this.page.locator('[data-test=add-to-cart-sauce-labs-bolt-t-shirt]');
+        this.cartBadge = this.page.locator('[data-test=shopping-cart-badge]');
     }
 
     async sortProducts(value: string){
         await this.sortContainer.selectOption(value);
     }
+
+    async addProductTocart(){
+        await this.productButtons.first().click();
+    }
+
+
+
 }

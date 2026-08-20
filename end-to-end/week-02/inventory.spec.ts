@@ -21,10 +21,7 @@ test('Inventory dispalys product information', async ({page}) => {
     const inventoryPage = new InventoryPage(page);
 
     await expect(inventoryPage.productItems).toHaveCount(6);
-
-    //Item Name
     await expect(inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');
-    //Item Button
     await expect(inventoryPage.productPrice.first()).toContainText('$29.99');
    
 });
@@ -32,11 +29,9 @@ test('Inventory dispalys product information', async ({page}) => {
 test('User can sort products by name descending', async ({page})=>{
 
     const inventoryPage = new InventoryPage(page);
-    //Name
+
     await expect(inventoryPage.productName).toHaveCount(6);
-    //Price
     await expect(inventoryPage.productPrice).toHaveCount(6);
-    //Cart
     await expect(inventoryPage.productButtons).toHaveCount(6);
 
 /*

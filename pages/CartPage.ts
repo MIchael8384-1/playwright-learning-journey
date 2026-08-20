@@ -10,8 +10,8 @@ export class CartPage {
     removeItem;
     continueButton;
     cartItems;
-    cartProducts;
-    
+    cartProduct;
+    cartProducts
 
 
 
@@ -25,8 +25,28 @@ export class CartPage {
         this.removeItem = this.page.getByRole('button', {name : 'Remove'});
         this.continueButton = this.page.getByRole('button', {name: 'Continue Shopping'});
         this.cartItems = this.page.locator('.cart_item');
-        this.cartProducts = this.page.locator('.inventory_item_name');
+        this.cartProduct = this.page.locator('.inventory_item_name');
+        this.cartProducts = this.page.locator('[data-test="item-4-title-link"]')
     }
+
+    async openCart(){
+        await this.cartLink.click();
+    }
+
+    async deleteItem(){
+        await this.removeItem.click();
+    }
+
+    async continueShopping(){
+        await this.continueButton.click()
+    }
+
+    async toCheckout(){
+        await this.checkoutButton.click()
+    }
+
+
+
 
 
 } 
