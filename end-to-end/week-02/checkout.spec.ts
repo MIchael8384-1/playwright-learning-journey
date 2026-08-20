@@ -19,12 +19,12 @@ test('User can complete checkout succesfully', async ({page}) =>{
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
 
-    await inventoryPage.addProductTocart();;
+    await inventoryPage.addProductToCart();;
     await cartPage.openCart();;
     await expect(page).toHaveURL(/cart/);
 
     await expect(cartPage.title).toBeVisible();
-    await expect(cartPage.cartProduct).toBeVisible();
+    await expect(cartPage.cartProducts).toBeVisible();
     await cartPage.toCheckout();
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
@@ -57,7 +57,7 @@ test('First name is required', async ({page}) => {
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
 
-    await inventoryPage.addProductTocart();
+    await inventoryPage.addProductToCart();
 
     await cartPage.openCart();
 
@@ -84,7 +84,7 @@ test('Last name is required', async ({page}) => {
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page)
 
-    await inventoryPage.addProductTocart();;
+    await inventoryPage.addProductToCart();;
 
     await cartPage.openCart();
 
@@ -111,7 +111,7 @@ test('Zip/PostCode is required', async ({page}) => {
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page)
 
-    await inventoryPage.addProductTocart();
+    await inventoryPage.addProductToCart();
 
     await cartPage.openCart();
 
@@ -139,7 +139,7 @@ test('User cancels purchase', async ({page}) => {
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page)
 
-    await inventoryPage.addProductTocart();
+    await inventoryPage.addProductToCart();
 
     await cartPage.openCart();
 
