@@ -3,16 +3,14 @@ import {Page} from "@playwright/test"
 export class CheckoutPage {
 
     title;
-    firstNamefield;
+    firstNameField;
     lastNameField;
     postalCodeField;
     continue;
-    checkoutOverviewTitle;
     paymentInformation;
     shippingInformation;
     priceTotal;
     finish;
-    titleComplete;
     checkoutComplete;
     home;
     errorMessage;
@@ -24,7 +22,7 @@ export class CheckoutPage {
 
     constructor(private page : Page){
         this.title =  this.page.locator('.title');
-        this.firstNamefield = this.page.getByPlaceholder('First Name');
+        this.firstNameField = this.page.getByPlaceholder('First Name');
         this.lastNameField = this.page.getByPlaceholder('Last Name');
         this.postalCodeField = this.page.getByPlaceholder('Zip/Postal Code');
         this.continue = this.page.getByRole('button', {name : 'Continue'});
@@ -47,7 +45,7 @@ export class CheckoutPage {
     }
 
     async enterFirstName(firstName: string){
-        await this.firstNamefield.fill(firstName)
+        await this.firstNameField.fill(firstName)
     }
 
     async enterLastName(lastName: string){

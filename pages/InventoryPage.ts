@@ -29,7 +29,7 @@ export class InventoryPage {
         await this.sortContainer.selectOption(value);
     }
 
-    async addProductTocart(){
+    async addProductToCart(){
         await this.productButtons.first().click();
     }
 

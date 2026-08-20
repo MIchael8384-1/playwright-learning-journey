@@ -11,7 +11,7 @@ export class CartPage {
     continueButton;
     cartItems;
     cartProduct;
-    cartProducts
+    
 
 
 
@@ -26,7 +26,6 @@ export class CartPage {
         this.continueButton = this.page.getByRole('button', {name: 'Continue Shopping'});
         this.cartItems = this.page.locator('.cart_item');
         this.cartProduct = this.page.locator('.inventory_item_name');
-        this.cartProducts = this.page.locator('[data-test="item-4-title-link"]')
     }
 
     async openCart(){

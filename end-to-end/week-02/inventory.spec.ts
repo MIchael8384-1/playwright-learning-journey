@@ -34,18 +34,6 @@ test('User can sort products by name descending', async ({page})=>{
     await expect(inventoryPage.productPrice).toHaveCount(6);
     await expect(inventoryPage.productButtons).toHaveCount(6);
 
-/*
-Debugging 
-
-    const productNames = await page.locator('.inventory_item_name');
-    console.log(productNames);
-
-    const firstProduct = productNames.first();
-    console.log(firstProduct);
-
-    const product = await firstProduct.innerText();
-    console.log(product);
-*/
     await expect(inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
 
     await expect(inventoryPage.sortOption).toHaveText('Name (A to Z)');
