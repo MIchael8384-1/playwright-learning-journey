@@ -10,7 +10,8 @@ export class InventoryPage {
     sortContainer;
     productBackpack;
     productTshirt;
-    cartBadge
+    cartBadge;
+    itemDescription
 
     constructor(private page : Page){
 
@@ -23,16 +24,16 @@ export class InventoryPage {
         this.productBackpack = this.page.locator('[data-test=add-to-cart-sauce-labs-backpack]');
         this.productTshirt = this.page.locator('[data-test=add-to-cart-sauce-labs-bolt-t-shirt]');
         this.cartBadge = this.page.locator('[data-test=shopping-cart-badge]');
+        this.itemDescription = this.page.locator('.inventory_item_description');
     }
 
     async sortProducts(value: string){
         await this.sortContainer.selectOption(value);
     }
 
-    async addProductToCart(){
-        await this.productButtons.first().click();
-    }
-
+   async addProductToCart(product: string){
+        await this.itemDescription.filter({hasText: product}).getByRole('button', {name : 'Add to cart'}).click();
+   }
 
 
 }

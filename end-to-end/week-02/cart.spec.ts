@@ -22,7 +22,7 @@ test('Add item to cart from inventory screen', async ({page}) => {
     await expect(inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
     
 
-    await inventoryPage.addProductToCart();
+    await inventoryPage.addProductToCart('Sauce Labs Backpack');
     await expect(cartPage.cartBadge).toHaveText('1');
     await expect(inventoryPage.productButtons.first()).toHaveText('Remove');
 })
@@ -32,7 +32,7 @@ test('User can add item to the cart', async ({page}) => {
     const inventoryPage = new InventoryPage(page);
     const cartPage = new CartPage(page);
 
-    await inventoryPage.addProductToCart();
+    await inventoryPage.addProductToCart('Sauce Labs Backpack');
     await cartPage.openCart();
 
     await expect(page).toHaveURL(/cart/);
@@ -48,7 +48,7 @@ test('Remove item so cart it empty and return to inventory screen', async ({page
     const inventoryPage = new InventoryPage(page);
     const cartPage = new CartPage(page);
 
-    await inventoryPage.addProductToCart();
+    await inventoryPage.addProductToCart('Sauce Labs Backpack');
     await cartPage.openCart();
 
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
