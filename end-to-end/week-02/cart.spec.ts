@@ -21,7 +21,6 @@ test('Add item to cart from inventory screen', async ({page}) => {
 
     await expect(inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
     
-
     await inventoryPage.addProductToCart('Sauce Labs Backpack');
     await expect(cartPage.cartBadge).toHaveText('1');
     await expect(inventoryPage.productButtons.first()).toHaveText('Remove');
@@ -33,7 +32,7 @@ test('User can add item to the cart', async ({page}) => {
     const cartPage = new CartPage(page);
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toContainText('Your Cart');
@@ -49,12 +48,12 @@ test('Remove item so cart it empty and return to inventory screen', async ({page
     const cartPage = new CartPage(page);
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
     await expect(cartPage.cartQuantity).toHaveText('1');
 
-    await cartPage.deleteItem();
+    await cartPage.removeItem();
 
     await expect(cartPage.cartBadge).toHaveCount(0);
 
@@ -66,13 +65,14 @@ test('Remove item so cart it empty and return to inventory screen', async ({page
 test('Add multiple items to cart', async ({page}) => {
     const inventoryPage = new InventoryPage(page);
     const cartPage = new CartPage(page);
-    
-    await inventoryPage.productBackpack.click();
-    await inventoryPage.productTshirt.click();
+
+
+    await inventoryPage.addProductToCart('Sauce Labs Backpack');
+    await inventoryPage.addProductToCart('Sauce Labs Bolt T-Shirt');
 
     await expect(cartPage.cartBadge).toHaveText('2');
 
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toBeVisible();

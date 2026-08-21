@@ -20,7 +20,7 @@ test('User can complete checkout succesfully', async ({page}) =>{
     const checkoutPage = new CheckoutPage(page);
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');;
-    await cartPage.openCart();;
+    await cartPage.navigateToCart();;
     await expect(page).toHaveURL(/cart/);
 
     await expect(cartPage.title).toBeVisible();
@@ -59,13 +59,13 @@ test('First name is required', async ({page}) => {
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');
 
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.toCheckout();
+    await cartPage.removeItem();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
@@ -86,13 +86,13 @@ test('Last name is required', async ({page}) => {
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');;
 
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.toCheckout();
+    await cartPage.removeItem();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
@@ -113,13 +113,13 @@ test('Zip/PostCode is required', async ({page}) => {
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');
 
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.toCheckout();
+    await cartPage.removeItem();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
@@ -141,13 +141,13 @@ test('User cancels purchase', async ({page}) => {
 
     await inventoryPage.addProductToCart('Sauce Labs Backpack');
 
-    await cartPage.openCart();
+    await cartPage.navigateToCart();
 
     await expect(page).toHaveURL(/cart/);
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.toCheckout();
+    await cartPage.removeItem();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');

@@ -7,7 +7,7 @@ export class CartPage {
     title;
     cartQuantity;
     checkoutButton
-    removeItem;
+    removeItems;
     continueButton;
     cartItems;
     cartProducts;
@@ -22,27 +22,29 @@ export class CartPage {
         this.title = this.page.locator('.title');
         this.cartQuantity = this.page.locator('.cart_quantity');
         this.checkoutButton = this.page.getByRole('button', {name : 'Checkout'});
-        this.removeItem = this.page.getByRole('button', {name : 'Remove'});
+        this.removeItems = this.page.getByRole('button', {name : 'Remove'});
         this.continueButton = this.page.getByRole('button', {name: 'Continue Shopping'});
         this.cartItems = this.page.locator('.cart_item');
         this.cartProducts = this.page.locator('.inventory_item_name');
     }
 
-    async openCart(){
-        await this.cartLink.click();
-    }
-
-    async deleteItem(){
-        await this.removeItem.click();
+    async removeItem(){
+        await this.removeItems.click();
     }
 
     async continueShopping(){
         await this.continueButton.click()
     }
 
-    async toCheckout(){
+    async proceedToCheckout(){
         await this.checkoutButton.click()
     }
+
+    async navigateToCart(){
+        await this.cartLink.click();
+
+    }
+
 
 
 
