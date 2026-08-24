@@ -7,9 +7,7 @@ export class CheckoutPage {
     lastNameField;
     postalCodeField;
     continue;
-    paymentInformation;
-    shippingInformation;
-    priceTotal;
+    productInformation;
     finish;
     checkoutComplete;
     home;
@@ -26,9 +24,7 @@ export class CheckoutPage {
         this.lastNameField = this.page.getByPlaceholder('Last Name');
         this.postalCodeField = this.page.getByPlaceholder('Zip/Postal Code');
         this.continue = this.page.getByRole('button', {name : 'Continue'});
-        this.paymentInformation = this.page.locator('.summary_info');
-        this.shippingInformation = this.page.locator('.summary_info');
-        this.priceTotal = this.page.locator('.summary_info');
+        this.productInformation = this.page.locator('.summary_info');
         this.finish = this.page.getByRole('button', {name : 'Finish'});
         this.checkoutComplete = this.page.locator('.complete-header');
         this.home = this.page.getByRole('button', {name : 'Back Home'});
@@ -37,7 +33,7 @@ export class CheckoutPage {
         this.checkoutProducts = this.page.locator('[data-test="item-4-title-link"]');
     }
 
-    async checkoutInformation(firstName : string, lastName: string, postalCode: string){
+    async submitCheckoutInformation(firstName : string, lastName: string, postalCode: string){
        await this.enterFirstName(firstName);
        await this.enterLastName(lastName)
        await this.enterPostalCode(postalCode);
@@ -60,7 +56,7 @@ export class CheckoutPage {
         await this.continue.click();
     }
 
-    async completeCheckout(){
+    async finishCheckout(){
         await this.finish.click();
     }
 

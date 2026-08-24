@@ -25,21 +25,21 @@ test('User can complete checkout succesfully', async ({page}) =>{
 
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toBeVisible();
-    await cartPage.toCheckout();
+    await cartPage.proceedToCheckout();
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await checkoutPage.checkoutInformation('Michael','Lynch','m31 7dr');
+    await checkoutPage.submitCheckoutInformation('Michael','Lynch','m31 7dr');
     await expect(page).toHaveURL(/checkout-step-two/);
 
     await expect(checkoutPage.title).toBeVisible();
     await expect(checkoutPage.checkoutProducts).toHaveText('Sauce Labs Backpack');
-    await expect(checkoutPage.paymentInformation).toContainText('Payment Information:');
-    await expect(checkoutPage.shippingInformation).toContainText('Shipping Information:');
-    await expect(checkoutPage.priceTotal).toContainText('Price Total');
+    await expect(checkoutPage.productInformation).toContainText('Payment Information:');
+    await expect(checkoutPage.productInformation).toContainText('Shipping Information:');
+    await expect(checkoutPage.productInformation).toContainText('Price Total');
     await expect(checkoutPage.finish).toBeVisible();
 
-    await checkoutPage.completeCheckout();
+    await checkoutPage.finishCheckout();
 
     await expect(page).toHaveURL(/checkout-complete/);
     await expect(checkoutPage.title).toHaveText('Checkout: Complete!');
@@ -65,15 +65,12 @@ test('First name is required', async ({page}) => {
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.removeItem();
+    await cartPage.proceedToCheckout();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await checkoutPage.enterFirstName('');
-    await checkoutPage.enterLastName('Test');
-    await checkoutPage.enterPostalCode('M30');
-    await checkoutPage.clickContinue();
+    await checkoutPage.submitCheckoutInformation('','Test','M30');
 
     await expect(checkoutPage.errorMessage).toHaveText('Error: First Name is required')
 });
@@ -92,15 +89,12 @@ test('Last name is required', async ({page}) => {
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.removeItem();
+    await cartPage.proceedToCheckout();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await checkoutPage.enterFirstName('Test');
-    await checkoutPage.enterLastName('');
-    await checkoutPage.enterPostalCode('M30');
-    await checkoutPage.clickContinue();
+    await checkoutPage.submitCheckoutInformation('Test','','M30');
 
     await expect(checkoutPage.errorMessage).toHaveText('Error: Last Name is required')
 })
@@ -119,15 +113,12 @@ test('Zip/PostCode is required', async ({page}) => {
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.removeItem();
+    await cartPage.proceedToCheckout();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await checkoutPage.enterFirstName('Test');
-    await checkoutPage.enterLastName('Test');
-    await checkoutPage.enterPostalCode('');
-    await checkoutPage.clickContinue();
+    await checkoutPage.submitCheckoutInformation('Test','Test','');
 
     await expect(checkoutPage.errorMessage).toHaveText('Error: Postal Code is required')
 })
@@ -147,15 +138,12 @@ test('User cancels purchase', async ({page}) => {
     await expect(cartPage.title).toBeVisible();
     await expect(cartPage.cartProducts).toHaveText('Sauce Labs Backpack');
 
-    await cartPage.removeItem();
+    await cartPage.proceedToCheckout();
 
     await expect(page).toHaveURL(/checkout-step-one/);
     await expect(checkoutPage.title).toHaveText('Checkout: Your Information');
 
-    await checkoutPage.enterFirstName('Test');
-    await checkoutPage.enterLastName('Test');
-    await checkoutPage.enterPostalCode('m30');
-    await checkoutPage.clickContinue();
+    await checkoutPage.submitCheckoutInformation('Test','Test','M30');
 
     await expect(page).toHaveURL(/checkout-step-two/);
     await expect(checkoutPage.title).toHaveText('Checkout: Overview')
