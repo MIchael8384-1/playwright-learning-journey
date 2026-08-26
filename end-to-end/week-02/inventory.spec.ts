@@ -1,12 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage'; 
-import { InventoryPage } from '../../pages/InventoryPage';
+import { TestSetup } from '../../testSetup';
 
 test.beforeEach(async ({page})=>{
 
-    const loginPage = new LoginPage(page);
-    await page.goto('https://www.saucedemo.com/');
-    await loginPage.login('standard_user','secret_sauce')
+    const setUp  = new TestSetup(page);
+ 
+    await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
 
 })
 
@@ -18,26 +17,26 @@ test('User can view the inventory Page', async ({page}) => {
 
 test('Inventory dispalys product information', async ({page}) => {
 
-    const inventoryPage = new InventoryPage(page);
+    const setUp  = new TestSetup(page);
 
-    await expect(inventoryPage.productItems).toHaveCount(6);
-    await expect(inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');
-    await expect(inventoryPage.productPrice.first()).toContainText('$29.99');
+    await expect(setUp.inventoryPage.productItems).toHaveCount(6);
+    await expect(setUp.inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');
+    await expect(setUp.inventoryPage.productPrice.first()).toContainText('$29.99');
    
 });
 
 test('User can sort products by name descending', async ({page})=>{
 
-    const inventoryPage = new InventoryPage(page);
+    const setUp  = new TestSetup(page);
 
-    await expect(inventoryPage.productName).toHaveCount(6);
-    await expect(inventoryPage.productPrice).toHaveCount(6);
-    await expect(inventoryPage.productButtons).toHaveCount(6);
+    await expect(setUp.inventoryPage.productName).toHaveCount(6);
+    await expect(setUp.inventoryPage.productPrice).toHaveCount(6);
+    await expect(setUp.inventoryPage.productButtons).toHaveCount(6);
 
-    await expect(inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
+    await expect(setUp.inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
 
-    await expect(inventoryPage.sortOption).toHaveText('Name (A to Z)');
-    await inventoryPage.sortProducts('za');
-    await expect(inventoryPage.productName.first()).toHaveText('Test.allTheThings() T-Shirt (Red)');
+    await expect(setUp.inventoryPage.sortOption).toHaveText('Name (A to Z)');
+    await setUp.inventoryPage.sortProducts('za');
+    await expect(setUp.inventoryPage.productName.first()).toHaveText('Test.allTheThings() T-Shirt (Red)');
 
 })
