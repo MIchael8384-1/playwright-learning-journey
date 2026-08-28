@@ -12,15 +12,12 @@ export class TestSetup{
     checkoutPage;
 
 
-
     constructor(private page:Page){
 
         this.loginPage = new LoginPage(page);
         this.inventoryPage = new InventoryPage(page);
         this.cartPage = new CartPage(page);
         this.checkoutPage = new CheckoutPage(page);
-
-
     }
 
     async toPage(url:string){
@@ -29,16 +26,8 @@ export class TestSetup{
 
     async prepareApplication(url:string, username: string, password : string){
 
-        const loginPage = new LoginPage(this.page);
-
         await this.page.goto(url);
-        await loginPage.login(username, password);
+        await this.loginPage.login(username, password);
 
     }
-
-   
-  
-
-
-
 }

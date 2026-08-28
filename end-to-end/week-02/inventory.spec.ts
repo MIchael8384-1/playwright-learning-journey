@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { TestSetup } from '../../testSetup';
 
+var setUp : TestSetup;
+
 test.beforeEach(async ({page})=>{
 
-    const setUp  = new TestSetup(page);
+    setUp  = new TestSetup(page);
  
     await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
 
@@ -17,8 +19,6 @@ test('User can view the inventory Page', async ({page}) => {
 
 test('Inventory dispalys product information', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
-
     await expect(setUp.inventoryPage.productItems).toHaveCount(6);
     await expect(setUp.inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');
     await expect(setUp.inventoryPage.productPrice.first()).toContainText('$29.99');
@@ -27,7 +27,6 @@ test('Inventory dispalys product information', async ({page}) => {
 
 test('User can sort products by name descending', async ({page})=>{
 
-    const setUp  = new TestSetup(page);
 
     await expect(setUp.inventoryPage.productName).toHaveCount(6);
     await expect(setUp.inventoryPage.productPrice).toHaveCount(6);

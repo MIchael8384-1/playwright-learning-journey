@@ -1,19 +1,18 @@
 import { test, expect } from '@playwright/test';
 import { TestSetup } from '../../testSetup';
 
+var setUp : TestSetup;
 
 test.beforeEach(async ({page}) => {
 
-    const testSetup = new TestSetup(page)
+    setUp = new TestSetup(page)
 
-    await testSetup.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
+    await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
     await expect(page).toHaveURL(/inventory/);
     
 });
 
-test('Add item to cart from inventory screen', async ({page}) => {
-
-    const setUp  = new TestSetup(page);
+test('Add item to cart from inventory screen', async ({}) => {
 
     await expect(setUp.inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
@@ -23,7 +22,6 @@ test('Add item to cart from inventory screen', async ({page}) => {
 
 test('User can add item to the cart', async ({page}) => {
     
-    const setUp  = new TestSetup(page);
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
     await setUp.cartPage.navigateToCart();
@@ -38,7 +36,6 @@ test('User can add item to the cart', async ({page}) => {
 
 test('Remove item so cart it empty and return to inventory screen', async ({page}) =>{
 
-    const setUp  = new TestSetup(page);
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
     await setUp.cartPage.navigateToCart();
@@ -57,7 +54,6 @@ test('Remove item so cart it empty and return to inventory screen', async ({page
 
 test('Add multiple items to cart', async ({page}) => {
     
-    const setUp  = new TestSetup(page);
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
     await setUp.inventoryPage.addProductToCart('Sauce Labs Bolt T-Shirt');

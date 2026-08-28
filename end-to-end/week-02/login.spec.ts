@@ -1,18 +1,17 @@
 import { test, expect } from '@playwright/test';
 import { TestSetup } from '../../testSetup';
 
+var setUp : TestSetup
 
     test.beforeEach(async({page})=>{
 
-        const setUp  = new TestSetup(page);
+        setUp  = new TestSetup(page);
         
         setUp.toPage('https://www.saucedemo.com/');
     });
 
 
 test('Login authenticated user', async ({page}) => {
-
-    const setUp  = new TestSetup(page);
     
     await setUp.loginPage.enterUsername('standard_user');
     await setUp.loginPage.enterPassword('secret_sauce');
@@ -23,8 +22,6 @@ test('Login authenticated user', async ({page}) => {
 });
 
 test('Invalid password login', async ({page})=>{
-
-    const setUp  = new TestSetup(page);
 
 
     await setUp.loginPage.enterUsername('standard_user');
@@ -40,7 +37,6 @@ test('Invalid password login', async ({page})=>{
 
 test('Locked user details', async ({page})=>{
 
-    const setUp  = new TestSetup(page);
     await setUp.loginPage.login('locked_out_user', 'secret_sauce');
 
     await expect(page.locator('.error-message-container')).toBeVisible();
@@ -49,7 +45,7 @@ test('Locked user details', async ({page})=>{
 
 test('Missing username', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
+
     await setUp.loginPage.login('','secret_sauce');
 
     await expect(page.getByText('Epic sadface: Username is required')).toBeVisible();
@@ -58,7 +54,6 @@ test('Missing username', async ({page}) => {
 
 test('Missing password', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
     await setUp.loginPage.login('standard_user','');
 
     await expect(page.getByText('Epic sadface: Password is required')).toBeVisible();

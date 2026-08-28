@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { TestSetup } from '../../testSetup';
 
+var setUp: TestSetup;
+
 test.beforeEach(async ({page}) => {
-   const setUp  = new TestSetup(page);
+    
+    setUp  = new TestSetup(page);
 
     await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
     await expect(page).toHaveURL(/inventory/);
@@ -10,7 +13,6 @@ test.beforeEach(async ({page}) => {
 
 test('User can complete checkout succesfully', async ({page}) =>{
     
-    const setUp  = new TestSetup(page);
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');;
     await setUp.cartPage.navigateToCart();;
@@ -46,8 +48,6 @@ test('User can complete checkout succesfully', async ({page}) =>{
 
 test('First name is required', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
-
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
 
@@ -70,8 +70,6 @@ test('First name is required', async ({page}) => {
 
 test('Last name is required', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
-
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');;
 
     await setUp.cartPage.navigateToCart();
@@ -92,7 +90,6 @@ test('Last name is required', async ({page}) => {
 
 test('Zip/PostCode is required', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
 
@@ -115,7 +112,6 @@ test('Zip/PostCode is required', async ({page}) => {
 
 test('User cancels purchase', async ({page}) => {
 
-    const setUp  = new TestSetup(page);
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
 
