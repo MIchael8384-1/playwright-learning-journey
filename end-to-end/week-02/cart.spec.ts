@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { TestSetup } from '../../testSetup';
 
-var setUp : TestSetup;
+let setUp : TestSetup;
 
 test.beforeEach(async ({page}) => {
 
