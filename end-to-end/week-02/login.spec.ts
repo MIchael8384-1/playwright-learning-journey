@@ -29,7 +29,7 @@ test('Invalid password login', async ({page})=>{
     await setUp.loginPage.clickLogin();
 
 
-    await expect(setUp.loginPage.errorMessgaeContainer).toBeVisible();
+    await expect(setUp.loginPage.errorMessageContainer).toBeVisible();
     await expect(setUp.loginPage.errorMessage).toBeVisible();
     await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Username and password do not match any user in this service');
     
@@ -39,7 +39,7 @@ test('Locked user details', async ({page})=>{
 
     await setUp.loginPage.login('locked_out_user', 'secret_sauce');
 
-    await expect(setUp.loginPage.errorMessgaeContainer).toBeVisible();
+    await expect(setUp.loginPage.errorMessageContainer).toBeVisible();
     await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Sorry, this user has been locked out.');
 });
 

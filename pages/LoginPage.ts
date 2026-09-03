@@ -6,7 +6,7 @@ export class LoginPage {
     passwordField;
     loginButton;
     errorMessage;
-    errorMessgaeContainer
+    errorMessageContainer
 
     constructor(private page: Page) {
         //locators
@@ -15,7 +15,7 @@ export class LoginPage {
         this.passwordField = this.page.getByPlaceholder('Password');
         this.loginButton = this.page.getByRole('button', {name : 'Login'});
         this.errorMessage = this.page.locator('[data-test="error"]');
-        this.errorMessgaeContainer = this.page.locator('.error-message-container');
+        this.errorMessageContainer = this.page.locator('.error-message-container');
 
     }
     //Methods 
