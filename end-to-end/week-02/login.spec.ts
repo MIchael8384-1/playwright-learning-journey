@@ -12,22 +12,15 @@ let setUp : TestSetup
 
 
 test('Login authenticated user', async ({page}) => {
-    
-    await setUp.loginPage.enterUsername('standard_user');
-    await setUp.loginPage.enterPassword('secret_sauce');
-    await setUp.loginPage.clickLogin();
 
+    await setUp.loginPage.login('standard_user', 'secret_sauce');
     await expect(page).toHaveURL(/inventory/);
 
 });
 
 test('Invalid password login', async ({page})=>{
 
-
-    await setUp.loginPage.enterUsername('standard_user');
-    await setUp.loginPage.enterPassword('invalid_password');
-    await setUp.loginPage.clickLogin();
-
+    await setUp.loginPage.login('standard_user', 'invalid_password');
 
     await expect(setUp.loginPage.errorMessageContainer).toBeVisible();
     await expect(setUp.loginPage.errorMessage).toBeVisible();
