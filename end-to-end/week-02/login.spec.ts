@@ -7,7 +7,7 @@ let setUp : TestSetup
 
         setUp  = new TestSetup(page);
         
-        setUp.toPage('https://www.saucedemo.com/');
+       await setUp.toPage('https://www.saucedemo.com/');
     });
 
 
@@ -29,7 +29,7 @@ test('Invalid password login', async ({page})=>{
     await setUp.loginPage.clickLogin();
 
 
-    await expect(page.locator('.error-message-container')).toBeVisible();
+    await expect(setUp.loginPage.errorMessgaeContainer).toBeVisible();
     await expect(setUp.loginPage.errorMessage).toBeVisible();
     await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Username and password do not match any user in this service');
     
@@ -39,8 +39,8 @@ test('Locked user details', async ({page})=>{
 
     await setUp.loginPage.login('locked_out_user', 'secret_sauce');
 
-    await expect(page.locator('.error-message-container')).toBeVisible();
-    await expect(page.getByText('Epic sadface: Sorry, this user has been locked out.')).toBeVisible();
+    await expect(setUp.loginPage.errorMessgaeContainer).toBeVisible();
+    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Sorry, this user has been locked out.');
 });
 
 test('Missing username', async ({page}) => {
@@ -48,7 +48,7 @@ test('Missing username', async ({page}) => {
 
     await setUp.loginPage.login('','secret_sauce');
 
-    await expect(page.getByText('Epic sadface: Username is required')).toBeVisible();
+    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Username is required');
     
 });
 
@@ -56,5 +56,5 @@ test('Missing password', async ({page}) => {
 
     await setUp.loginPage.login('standard_user','');
 
-    await expect(page.getByText('Epic sadface: Password is required')).toBeVisible();
-});
+    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Password is required');
+})
