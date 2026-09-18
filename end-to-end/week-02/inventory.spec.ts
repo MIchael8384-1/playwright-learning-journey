@@ -17,7 +17,7 @@ test('User can view the inventory Page', async ({page}) => {
     await expect(page.getByText('Products')).toBeVisible();
 });
 
-test('Inventory dispalys product information', async ({page}) => {
+test('Inventory dispalys product information', async ({}) => {
 
     await expect(setUp.inventoryPage.productItems).toHaveCount(6);
     await expect(setUp.inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');

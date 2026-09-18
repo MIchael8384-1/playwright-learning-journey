@@ -1,18 +1,19 @@
-import { test, expect } from '@playwright/test';
-import { TestSetup } from '../../testSetup';
+import { expect } from '@playwright/test';
+//import { TestSetup } from '../../testSetup';
+import { test } from '../../fixtures/test';
 
-let setUp : TestSetup;
+// let setUp : TestSetup;
 
-test.beforeEach(async ({page}) => {
+// test.beforeEach(async ({page}) => {
 
-    setUp = new TestSetup(page)
+//     setUp = new TestSetup(page)
 
-    await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
-    await expect(page).toHaveURL(/inventory/);
+//     await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
+//     await expect(page).toHaveURL(/inventory/);
     
-});
+// });
 
-test('Add item to cart from inventory screen', async ({}) => {
+test('Add item to cart from inventory screen', async ({setUp}) => {
 
     await expect(setUp.inventoryPage.productName.first()).toHaveText('Sauce Labs Backpack');
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
@@ -20,7 +21,7 @@ test('Add item to cart from inventory screen', async ({}) => {
     await expect(setUp.inventoryPage.productButtons.first()).toHaveText('Remove');
 })
 
-test('User can add item to the cart', async ({page}) => {
+test('User can add item to the cart', async ({setUp, page}) => {
     
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
@@ -34,7 +35,7 @@ test('User can add item to the cart', async ({page}) => {
 
 });
 
-test('Remove item so cart it empty and return to inventory screen', async ({page}) =>{
+test('Remove item so cart it empty and return to inventory screen', async ({setUp, page}) =>{
 
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
@@ -52,7 +53,7 @@ test('Remove item so cart it empty and return to inventory screen', async ({page
     await expect(page).toHaveURL(/inventory/);
 });
 
-test('Add multiple items to cart', async ({page}) => {
+test('Add multiple items to cart', async ({setUp, page}) => {
     
 
     await setUp.inventoryPage.addProductToCart('Sauce Labs Backpack');
