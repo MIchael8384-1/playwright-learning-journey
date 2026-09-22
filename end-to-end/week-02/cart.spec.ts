@@ -1,17 +1,6 @@
 import { expect } from '@playwright/test';
-//import { TestSetup } from '../../testSetup';
 import { test } from '../../fixtures/test';
 
-// let setUp : TestSetup;
-
-// test.beforeEach(async ({page}) => {
-
-//     setUp = new TestSetup(page)
-
-//     await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
-//     await expect(page).toHaveURL(/inventory/);
-    
-// });
 
 test('Add item to cart from inventory screen', async ({setUp}) => {
 

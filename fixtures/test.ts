@@ -1,7 +1,7 @@
 import { test as basetest } from "@playwright/test";
-import { TestSetup } from "../testSetup";;
+import { TestSetup } from "../testSetup";
 
-const test = basetest.extend<{setUp: any;}>({
+const test = basetest.extend<{setUp: TestSetup;}>({
 
     setUp: async ({ page }, use) => {
         
@@ -9,7 +9,8 @@ const test = basetest.extend<{setUp: any;}>({
 
         await setUp.prepareApplication('https://www.saucedemo.com/','standard_user','secret_sauce');
 
-        await use(setUp);
+
+        await use(setUp)
     }
 
 });

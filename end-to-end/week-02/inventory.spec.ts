@@ -1,23 +1,13 @@
-import { test, expect } from '@playwright/test';
-import { TestSetup } from '../../testSetup';
+import { expect } from '@playwright/test';
+import { test } from '../../fixtures/test';
 
-let setUp : TestSetup;
-
-test.beforeEach(async ({page})=>{
-
-    setUp  = new TestSetup(page);
- 
-    await setUp.prepareApplication('https://www.saucedemo.com/', 'standard_user', 'secret_sauce');
-
-})
-
-test('User can view the inventory Page', async ({page}) => {
+test('User can view the inventory Page', async ({page, setUp}) => {
 
     await expect(page).toHaveURL(/inventory/);
     await expect(page.getByText('Products')).toBeVisible();
 });
 
-test('Inventory dispalys product information', async ({}) => {
+test('Inventory dispalys product information', async ({setUp}) => {
 
     await expect(setUp.inventoryPage.productItems).toHaveCount(6);
     await expect(setUp.inventoryPage.productName.first()).toContainText('Sauce Labs Backpack');
@@ -25,7 +15,7 @@ test('Inventory dispalys product information', async ({}) => {
    
 });
 
-test('User can sort products by name descending', async ({page})=>{
+test('User can sort products by name descending', async ({setUp})=>{
 
 
     await expect(setUp.inventoryPage.productName).toHaveCount(6);
