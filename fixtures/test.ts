@@ -1,7 +1,7 @@
 import { test as basetest } from "@playwright/test";
 import { TestSetup } from "../testSetup";
 
-const test = basetest.extend<{setUp: TestSetup;}>({
+const test = basetest.extend<{setUp : TestSetup; unauthenticatedSetUp: TestSetup}>({
 
     setUp: async ({ page }, use) => {
         
@@ -11,7 +11,19 @@ const test = basetest.extend<{setUp: TestSetup;}>({
 
 
         await use(setUp)
+    },
+
+    unauthenticatedSetUp: async ({page}, use) => {
+
+        const setUp = new TestSetup(page);
+        
+        await setUp.toPage('https://www.saucedemo.com/');
+
+        await use(setUp)
     }
+
+
+
 
 });
 

@@ -1,53 +1,43 @@
-import { test, expect } from '@playwright/test';
-import { TestSetup } from '../../testSetup';
+import { expect } from '@playwright/test';
+import { test } from '../../fixtures/test';
 
-let setUp : TestSetup
-
-    test.beforeEach(async({page})=>{
-
-        setUp  = new TestSetup(page);
-        
-       await setUp.toPage('https://www.saucedemo.com/');
-    });
-
-
-test('Login authenticated user', async ({page}) => {
+test('Login authenticated user', async ({setUp,page}) => {
 
     await setUp.loginPage.login('standard_user', 'secret_sauce');
     await expect(page).toHaveURL(/inventory/);
 
 });
 
-test('Invalid password login', async ({page})=>{
+test('Invalid password login', async ({unauthenticatedSetUp})=>{
 
-    await setUp.loginPage.login('standard_user', 'invalid_password');
+    await unauthenticatedSetUp.loginPage.login('standard_user', 'invalid_password');
 
-    await expect(setUp.loginPage.errorMessageContainer).toBeVisible();
-    await expect(setUp.loginPage.errorMessage).toBeVisible();
-    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Username and password do not match any user in this service');
+    await expect(unauthenticatedSetUp.loginPage.errorMessageContainer).toBeVisible();
+    await expect(unauthenticatedSetUp.loginPage.errorMessage).toBeVisible();
+    await expect(unauthenticatedSetUp.loginPage.errorMessage).toContainText('Epic sadface: Username and password do not match any user in this service');
     
 });
 
-test('Locked user details', async ({page})=>{
+test('Locked user details', async ({unauthenticatedSetUp})=>{
 
-    await setUp.loginPage.login('locked_out_user', 'secret_sauce');
+    await unauthenticatedSetUp.loginPage.login('locked_out_user', 'secret_sauce');
 
-    await expect(setUp.loginPage.errorMessageContainer).toBeVisible();
-    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Sorry, this user has been locked out.');
+    await expect(unauthenticatedSetUp.loginPage.errorMessageContainer).toBeVisible();
+    await expect(unauthenticatedSetUp.loginPage.errorMessage).toContainText('Epic sadface: Sorry, this user has been locked out.');
 });
 
-test('Missing username', async ({page}) => {
+test('Missing username', async ({unauthenticatedSetUp}) => {
 
 
-    await setUp.loginPage.login('','secret_sauce');
+    await unauthenticatedSetUp.loginPage.login('','secret_sauce');
 
-    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Username is required');
+    await expect(unauthenticatedSetUp.loginPage.errorMessage).toContainText('Epic sadface: Username is required');
     
 });
 
-test('Missing password', async ({page}) => {
+test('Missing password', async ({unauthenticatedSetUp}) => {
 
-    await setUp.loginPage.login('standard_user','');
+    await unauthenticatedSetUp.loginPage.login('standard_user','');
 
-    await expect(setUp.loginPage.errorMessage).toContainText('Epic sadface: Password is required');
+    await expect(unauthenticatedSetUp.loginPage.errorMessage).toContainText('Epic sadface: Password is required');
 })
