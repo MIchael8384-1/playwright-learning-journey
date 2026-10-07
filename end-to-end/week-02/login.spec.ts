@@ -1,9 +1,9 @@
 import { expect } from '@playwright/test';
 import { test } from '../../fixtures/test';
 
-test('Login authenticated user', async ({setUp,page}) => {
+test('Login authenticated user', async ({unauthenticatedSetUp, page}) => {
 
-    await setUp.loginPage.login('standard_user', 'secret_sauce');
+    await unauthenticatedSetUp.loginPage.login('standard_user', 'secret_sauce');
     await expect(page).toHaveURL(/inventory/);
 
 });
